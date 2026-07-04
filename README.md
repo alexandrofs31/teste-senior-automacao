@@ -109,7 +109,7 @@ python -m parte2_hacker_news.reporter
 - **Retry automático**: `requests` com `Retry(total=3, backoff_factor=0.5)` para erros 5xx e timeouts de rede. Backoff exponencial: 0 s, 0,5 s, 1 s.
 - **Fila de falhas**: IDs que falharam após todos os retries vão para a tabela `failed_items`. Na próxima execução, são reprocessados antes dos IDs novos.
 - **Itens null**: itens deletados da API retornam `null` — são contados como "ignorados" e não bloqueiam o watermark.
-- **Watermark conservador**: avança até o maior ID processado com sucesso. Falhas não bloqueiam o watermark (trade-off deliberado: preferimos avançar e ter retry queue em vez de paralisar o pipeline).
+- **Watermark por maior sucesso**: avança até o maior ID processado com sucesso, mesmo que haja IDs falhos no intervalo. Os IDs falhos ficam registrados em `failed_items` e são reprocessados na próxima execução — trade-off deliberado entre progresso do pipeline e rastreabilidade de falhas.
 
 ### Schema SQLite
 
@@ -128,7 +128,7 @@ failed_items -- fila de IDs com erro, com contador de tentativas
 **raw_json**: o JSON bruto do item é preservado integralmente, garantindo que campos futuros da API não sejam perdidos.
 
 **Limitações conhecidas**:
-- Não é thread-safe (SQLite WAL atenua, mas não elimina o problema).
+- Não é thread-safe; SQLite com journal em memória não garante consistência sob escrita concorrente.
 - IDs que falham persistentemente (ex: item permanentemente indisponível) acumulam na fila; não há TTL de expiração — melhoria futura.
 - A carga inicial não retroage ao início do histórico do HN (42 M+ itens). Isso é intencional — o objetivo é demonstrar o padrão incremental.
 
