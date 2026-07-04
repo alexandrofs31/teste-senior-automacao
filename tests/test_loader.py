@@ -4,6 +4,7 @@ Foco: watermark, idempotência, tratamento de falhas, resumo correto.
 Usa mocks para não fazer chamadas reais à API do HN.
 """
 
+import gc
 import tempfile
 from pathlib import Path
 from unittest.mock import MagicMock, patch, call
@@ -19,6 +20,7 @@ def tmp_db():
     with tempfile.NamedTemporaryFile(suffix=".db", delete=False) as f:
         db_path = Path(f.name)
     yield db_path
+    gc.collect()  # libera handles do SQLite antes de deletar (necessário no Windows)
     db_path.unlink(missing_ok=True)
 
 
