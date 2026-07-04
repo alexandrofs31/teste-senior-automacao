@@ -1,0 +1,72 @@
+{
+  "resultado": "Congratulations!",
+  "success_rate": "100%",
+  "fields_correct": 70,
+  "fields_total": 70,
+  "duration_ms": 148872,
+  "rounds": 10,
+  "registros_preenchidos": [
+    {
+      "round": 1,
+      "nome": "John Smith",
+      "empresa": "IT Solutions",
+      "role": "Analyst"
+    },
+    {
+      "round": 2,
+      "nome": "Jane Dorsey",
+      "empresa": "MediCare",
+      "role": "Medical Engineer"
+    },
+    {
+      "round": 3,
+      "nome": "Albert Kipling",
+      "empresa": "Waterfront",
+      "role": "Accountant"
+    },
+    {
+      "round": 4,
+      "nome": "Michael Robertson",
+      "empresa": "MediCare",
+      "role": "IT Specialist"
+    },
+    {
+      "round": 5,
+      "nome": "Doug Derrick",
+      "empresa": "Timepath Inc.",
+      "role": "Analyst"
+    },
+    {
+      "round": 6,
+      "nome": "Jessie Marlowe",
+      "empresa": "Aperture Inc.",
+      "role": "Scientist"
+    },
+    {
+      "round": 7,
+      "nome": "Stan Hamm",
+      "empresa": "Sugarwell",
+      "role": "Advisor"
+    },
+    {
+      "round": 8,
+      "nome": "Michelle Norton",
+      "empresa": "Aperture Inc.",
+      "role": "Scientist"
+    },
+    {
+      "round": 9,
+      "nome": "Stacy Shelby",
+      "empresa": "TechDev",
+      "role": "HR Manager"
+    },
+    {
+      "round": 10,
+      "nome": "Lara Palmer",
+      "empresa": "Timepath Inc.",
+      "role": "Programmer"
+    }
+  ],
+  "tecnica_usada": "ng-reflect-name attribute — identifica cada input pelo binding Angular, independente da ordem visual dos campos",
+  "observacao": "Campos identificados por ng-reflect-name (labelFirstName, labelLastName, etc.), nao por posicao. Garante 100% mesmo com reordenamento entre rounds."
+}

@@ -1,0 +1,31 @@
+{
+  "carga_inicial": {
+    "start_id": 42100001,
+    "end_id": 42100050,
+    "consulted": 50,
+    "inserted": 47,
+    "updated": 0,
+    "ignored_null": 2,
+    "failures": 1,
+    "duration_seconds": 0.203
+  },
+  "carga_incremental": {
+    "start_id": 42100051,
+    "end_id": 42100060,
+    "consulted": 11,
+    "inserted": 11,
+    "updated": 0,
+    "ignored_null": 0,
+    "failures": 0,
+    "retried_ok": 1,
+    "duration_seconds": 0.055
+  },
+  "estado_final": {
+    "total_itens_na_base": 58,
+    "watermark_last_item_id": "42100060",
+    "distribuicao_por_tipo": {
+      "comment": 30,
+      "story": 28
+    }
+  }
+}
