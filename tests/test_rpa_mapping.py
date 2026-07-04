@@ -8,7 +8,7 @@ from io import BytesIO
 import pandas as pd
 import pytest
 
-from parte1_rpa.rpa_challenge import COLUMN_TO_LABEL, parse_excel, _parse_accuracy
+from parte1_rpa.rpa_challenge import COLUMN_TO_NG_NAME, parse_excel, _parse_accuracy
 
 
 # ---------------------------------------------------------------------------
@@ -87,17 +87,17 @@ def test_parse_excel_ignora_linhas_vazias():
 # ---------------------------------------------------------------------------
 
 def test_mapeamento_cobre_todas_colunas_do_excel():
-    """Todas as colunas esperadas no Excel devem ter mapeamento para label."""
+    """Todas as colunas esperadas no Excel devem ter mapeamento para ng-reflect-name."""
     expected_columns = {
         "First Name", "Last Name", "Company Name",
         "Role in Company", "Address", "Email", "Phone Number",
     }
-    assert set(COLUMN_TO_LABEL.keys()) == expected_columns
+    assert set(COLUMN_TO_NG_NAME.keys()) == expected_columns
 
 
 def test_mapeamento_nao_tem_valores_vazios():
-    for col, label in COLUMN_TO_LABEL.items():
-        assert label.strip(), f"Label vazia para coluna '{col}'"
+    for col, ng_name in COLUMN_TO_NG_NAME.items():
+        assert ng_name.strip(), f"ng-reflect-name vazio para coluna '{col}'"
 
 
 # ---------------------------------------------------------------------------

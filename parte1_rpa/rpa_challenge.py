@@ -6,8 +6,8 @@ o formulário dinâmico para todos os registros com 100 % de acurácia.
 
 Decisão de biblioteca: Playwright (async)
 - Auto-wait nativo elimina sleeps frágeis.
-- get_by_label() identifica campos pelo texto da label, independente
-  da posição visual — critério principal do desafio.
+- Campos identificados pelo atributo Angular ng-reflect-name, que é
+  estável e independente da posição visual — critério principal do desafio.
 - Suporte headless/não-headless via flag.
 - API moderna e bem mantida.
 
@@ -41,16 +41,18 @@ ARTIFACTS_DIR.mkdir(exist_ok=True)
 
 RPA_URL = "https://rpachallenge.com/"
 
-# Mapeamento: coluna do Excel → texto exato da label no formulário.
-# Isolado aqui para facilitar manutenção caso o site mude labels.
-COLUMN_TO_LABEL: dict[str, str] = {
-    "First Name": "First Name",
-    "Last Name": "Last Name",
-    "Company Name": "Company Name",
-    "Role in Company": "Role in Company",
-    "Address": "Address",
-    "Email": "Email",
-    "Phone Number": "Phone Number",
+# Mapeamento: coluna do Excel → atributo ng-reflect-name do input Angular.
+# O Angular renderiza cada input com este atributo estável, independente
+# da ordem visual dos campos ou do idioma exibido na página.
+# Isolado aqui para facilitar manutenção caso o site mude atributos.
+COLUMN_TO_NG_NAME: dict[str, str] = {
+    "First Name":      "labelFirstName",
+    "Last Name":       "labelLastName",
+    "Company Name":    "labelCompanyName",
+    "Role in Company": "labelRole",
+    "Address":         "labelAddress",
+    "Email":           "labelEmail",
+    "Phone Number":    "labelPhone",
 }
 
 
@@ -88,19 +90,19 @@ async def fill_record(page: Page, record: dict) -> None:
     """
     Preenche todos os campos do formulário para um registro.
 
-    Usa get_by_label() — localiza inputs pelo texto da label associada,
+    Localiza cada input pelo atributo ng-reflect-name (binding Angular),
     não por posição ou seletor CSS frágil. Isso garante acurácia mesmo
     quando a ordem visual dos campos muda a cada submissão.
     """
-    for col, label_text in COLUMN_TO_LABEL.items():
+    for col, ng_name in COLUMN_TO_NG_NAME.items():
         value = record.get(col)
         if value is None:
             logger.warning(f"Coluna '{col}' ausente no registro; pulando.")
             continue
-        field = page.get_by_label(label_text)
+        field = page.locator(f'input[ng-reflect-name="{ng_name}"]')
         await field.wait_for(state="visible", timeout=5_000)
         await field.fill(str(value).strip())
-        logger.debug(f"  {label_text}: '{value}'")
+        logger.debug(f"  {ng_name}: '{value}'")
 
 
 async def run_challenge(headless: bool = True) -> dict:
