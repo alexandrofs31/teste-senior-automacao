@@ -21,12 +21,25 @@
 
 ---
 
-## Instalação
+## Como rodar (início rápido)
 
-```bash
+```powershell
+# 1. Clone o repositório
+git clone https://github.com/alexandrofs31/teste-senior-automacao
+cd teste-senior-automacao
+
+# 2. Instale as dependências
 pip install -r requirements.txt
 playwright install chromium
+
+# 3. Crie o arquivo de variáveis de ambiente
+Copy-Item .env.example .env   # PowerShell
+# cp .env.example .env        # Linux/Mac
+
+# 4. Pronto — rode a Parte 1 ou Parte 2 conforme as seções abaixo
 ```
+
+> O arquivo `.env` não é versionado (`.gitignore`). Os valores padrão do `.env.example` já apontam para as URLs públicas corretas — nenhuma configuração adicional é necessária para rodar o projeto.
 
 ---
 
@@ -53,12 +66,11 @@ python -m parte1_rpa.rpa_challenge --no-headless
 
 **Playwright** foi escolhido sobre Selenium por:
 
-- `get_by_label()` resolve campos pelo texto da label associada — robusto a mudanças na ordem visual, que é exatamente o comportamento do RPA Challenge.
 - Auto-wait nativo: não há `time.sleep()` frágil; a biblioteca espera o elemento estar interativo antes de agir.
 - API async moderna com download management integrado.
 - Suporte a headless/não-headless sem configuração adicional.
 
-**Identificação de campos**: usa `page.get_by_label(label_text)` em vez de seletores CSS/XPath posicionais ou `ng-reflect-name` hardcoded. Isso garante funcionamento mesmo se o Angular mudar atributos internos.
+**Identificação de campos**: usa `page.locator('input[ng-reflect-name="..."]')` — atributo Angular estável que identifica cada campo independente da posição visual. É exatamente esse reposicionamento dinâmico dos campos que o RPA Challenge testa, e o `ng-reflect-name` garante 100% de acurácia em todas as 10 rodadas.
 
 **Limitações conhecidas**:
 - Se o rpachallenge.com estiver fora do ar ou mudar radicalmente o HTML, a automação precisará de ajuste nos seletores de "Download" e "Start".
